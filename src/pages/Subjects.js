@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { db, auth } from "../firebase";
+import "../css/subject.css";
 import {
   collection,
   addDoc,
@@ -98,33 +99,34 @@ export default function Subjects() {
   };
 
   return (
-    <div style={{ maxWidth: 600, margin: "40px auto" }}>
+    <div className="subjects-container">
       <h2>Quản lý môn học</h2>
-      <form onSubmit={handleAddSubject} style={{ marginBottom: 24 }}>
+
+      <form onSubmit={handleAddSubject} className="subject-form">
         <input
           type="text"
           placeholder="Tên môn học"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          style={{ marginRight: 8 }}
         />
         <input
           type="text"
           placeholder="Mô tả"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          style={{ marginRight: 8 }}
         />
         <button type="submit">Thêm môn học</button>
       </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {error && <p className="error-text">{error}</p>}
+
       {loading ? (
         <p>Đang tải...</p>
       ) : (
-        <ul>
+        <ul className="subject-list">
           {subjects.map((subject) => (
-            <li key={subject.id} style={{ marginBottom: 8 }}>
+            <li key={subject.id} className="subject-item">
               {editId === subject.id ? (
                 <form onSubmit={handleUpdate} style={{ display: "inline" }}>
                   <input
@@ -132,13 +134,11 @@ export default function Subjects() {
                     value={editName}
                     onChange={(e) => setEditName(e.target.value)}
                     required
-                    style={{ marginRight: 8 }}
                   />
                   <input
                     type="text"
                     value={editDescription}
                     onChange={(e) => setEditDescription(e.target.value)}
-                    style={{ marginRight: 8 }}
                   />
                   <button type="submit">Lưu</button>
                   <button
@@ -151,25 +151,18 @@ export default function Subjects() {
                 </form>
               ) : (
                 <>
-                  <strong>{subject.name}</strong> - {subject.description}
-                  <a
-                    href={`/questions?subjectId=${subject.id}`}
-                    style={{ marginLeft: 8 }}
-                  >
-                    Quản lý câu hỏi
-                  </a>
-                  <button
-                    onClick={() => handleEdit(subject)}
-                    style={{ marginLeft: 8 }}
-                  >
-                    Sửa
-                  </button>
-                  <button
-                    onClick={() => handleDelete(subject.id)}
-                    style={{ marginLeft: 4, color: "red" }}
-                  >
-                    Xóa
-                  </button>
+                  <div>
+                    <strong>{subject.name}</strong> - {subject.description}
+                  </div>
+                  <div>
+                    <a href={`/questions?subjectId=${subject.id}`}>
+                      Quản lý câu hỏi
+                    </a>
+                    <button onClick={() => handleEdit(subject)}>Sửa</button>
+                    <button onClick={() => handleDelete(subject.id)}>
+                      Xóa
+                    </button>
+                  </div>
                 </>
               )}
             </li>
